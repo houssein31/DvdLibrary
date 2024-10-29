@@ -39,8 +39,106 @@
         <!-- Dynamic DVD rows will be added here -->
         </tbody>
     </table>
+
+    <!-- DVD Details Section -->
+    <div id="dvd-details" class="hidden">
+        <h2 id="dvd-title-header"></h2>
+        <hr>
+        <label for="dvd-title">DVD Title:</label>
+        <input type="text" id="dvd-title" readonly>
+
+        <label for="release-year">Release Year:</label>
+        <input type="text" id="release-year" readonly>
+
+        <label for="director">Director:</label>
+        <input type="text" id="director" readonly>
+
+        <label for="rating">Rating:</label>
+        <select id="rating" disabled>
+            <option value="G">G</option>
+            <option value="PG">PG</option>
+            <option value="PG13">PG13</option>
+            <option value="R">R</option>
+        </select>
+
+        <label for="notes">Notes:</label>
+        <textarea id="notes" rows="4" readonly></textarea>
+
+        <button id="back-btn">Back to DVD List</button>
+    </div>
+
+    <!-- Create DVD Form Section -->
+    <div id="create-dvd-form" class="hidden">
+        <h2>Create DVD</h2>
+        <div id="create-dvd-error-message" class="error hidden"></div> <!-- For validation errors when creating a DVD -->
+        <!-- For validation errors -->
+
+        <label for="new-dvd-title">DVD Title:</label>
+        <input type="text" id="new-dvd-title" required>
+
+        <label for="new-release-year">Release Year:</label>
+        <input type="text" id="new-release-year" required>
+
+        <label for="new-director">Director:</label>
+        <input type="text" id="new-director" required>
+
+        <label for="new-rating">Rating:</label>
+        <select id="new-rating">
+            <option value="G">G</option>
+            <option value="PG">PG</option>
+            <option value="PG13">PG13</option>
+            <option value="R">R</option>
+        </select>
+
+        <label for="new-notes">Notes:</label>
+        <textarea id="new-notes" rows="4"></textarea>
+
+        <button id="save-dvd-btn">Save Changes</button>
+        <button id="cancel-dvd-btn">Cancel</button>
+    </div>
+
 </div>
 
+<!-- Custom Delete Confirmation Modal -->
+<div id="delete-confirm-modal" class="modal hidden">
+    <div class="modal-content">
+        <p>Are you sure you want to delete this DVD from your collection?</p>
+        <button id="confirm-delete-btn" class="confirm-btn">Yes</button>
+        <button id="cancel-delete-btn" class="cancel-btn">No</button>
+    </div>
+</div>
+
+<!-- Edit DVD Form Section -->
+<div id="edit-dvd-form" class="hidden">
+    <h2>Edit DVD</h2>
+    <div id="edit-dvd-error-message" class="error hidden"></div> <!-- For validation errors when editing a DVD -->
+
+    <label for="edit-dvd-title">DVD Title:</label>
+    <input type="text" id="edit-dvd-title" required>
+
+    <label for="edit-release-year">Release Year:</label>
+    <input type="text" id="edit-release-year" required>
+
+    <label for="edit-director">Director:</label>
+    <input type="text" id="edit-director" required>
+
+    <label for="edit-rating">Rating:</label>
+    <select id="edit-rating">
+        <option value="G">G</option>
+        <option value="PG">PG</option>
+        <option value="PG13">PG13</option>
+        <option value="R">R</option>
+    </select>
+
+    <label for="edit-notes">Notes:</label>
+    <textarea id="edit-notes" rows="4"></textarea>
+
+    <button id="save-edited-dvd-btn">Save Changes</button>
+    <button id="cancel-edit-dvd-btn">Cancel</button>
+</div>
+
+
+<!-- Updated script tag to link to main.js -->
 <script src="main.js"></script>
 </body>
 </html>
