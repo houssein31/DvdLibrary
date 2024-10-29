@@ -1,4 +1,3 @@
-// Set the correct backend API URL here
 const apiUrl = "http://localhost:8080/api/dvd/all"; // Updated to match backend endpoint
 const dvdUrl = "http://localhost:8080/api/dvd"; // Base URL for DVD operations
 
@@ -93,18 +92,36 @@ function showDvdList() {
 
 function searchDvds() {
     const category = document.getElementById("search-category").value;
-    const term = document.getElementById("search-term").value;
+    const term = document.getElementById("search-term").value.trim();
 
     if (!category || !term) {
         showError("Both Search Category and Search Term are required.");
         return;
     }
 
-    fetch(`${apiUrl}/${category}/${term}`)
-        .then(response => response.json())
-        .then(data => displayDvds(data))
-        .catch(error => console.error('Error searching DVDs:', error));
+    let searchUrl = `${dvdUrl}/${category}/${term}`;
+
+    fetch(searchUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching search results');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.length === 0) {
+                showError("No results found.");
+            } else {
+                displayDvds(data);
+                document.getElementById("error-message").classList.add("hidden");
+            }
+        })
+        .catch(error => {
+            console.error('Error searching DVDs:', error);
+            showError("Error fetching search results.");
+        });
 }
+
 
 function showError(message) {
     const errorDiv = document.getElementById("error-message");
@@ -238,7 +255,7 @@ function updateDvd() {
     if (!/^\d{4}$/.test(releaseYear)) errors.push("Please enter a 4-digit year.");
 
     if (errors.length > 0) {
-        showEditError(errors.join(" "));
+        showError(errors.join(" "));
         return;
     }
 
@@ -265,16 +282,10 @@ function updateDvd() {
         })
         .then(() => {
             loadDvds();
-            showDvdList(); // Ensure that the DVD list is shown after saving changes
+            showDvdList();
         })
         .catch(error => {
             console.error("Error updating DVD:", error);
-            showEditError("There was an error updating the DVD.");
+            showError("There was an error updating the DVD.");
         });
-}
-
-function showEditError(message) {
-    const errorDiv = document.getElementById("edit-dvd-error-message");
-    errorDiv.textContent = message;
-    errorDiv.classList.remove("hidden");
 }

@@ -58,7 +58,7 @@ public class DvdController {
         }
     }
 
-    @GetMapping("/releaseyear/{releaseYear}")
+    @GetMapping("/year/{releaseYear}")
     public ResponseEntity<List<Dvd>> getDvdsByReleaseYear(@PathVariable String releaseYear) {
         try {
             List<Dvd> dvds = dvdService.getDvdsByReleaseYear(releaseYear);
