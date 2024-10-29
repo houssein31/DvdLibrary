@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DVD Library</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>DVD Library</h1>
+        <button id="create-dvd-btn">Create DVD</button>
+        <div class="search-container">
+            <select id="search-category">
+                <option value="" disabled selected>Search Category</option>
+                <option value="title">Title</option>
+                <option value="year">Release Year</option>
+                <option value="director">Director Name</option>
+                <option value="rating">Rating</option>
+            </select>
+            <input type="text" id="search-term" placeholder="Search Term" required>
+            <button id="search-btn">Search</button>
+        </div>
+    </header>
+    <hr>
+    <div id="error-message" class="error hidden"></div>
+    <table id="dvd-table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Release Date</th>
+            <th>Director</th>
+            <th>Rating</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Dynamic DVD rows will be added here -->
+        </tbody>
+    </table>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
