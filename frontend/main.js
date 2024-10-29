@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("create-dvd-btn").addEventListener("click", showCreateDvdForm);
     document.getElementById("search-btn").addEventListener("click", searchDvds);
     document.getElementById("back-btn").addEventListener("click", showDvdList);
+    document.getElementById("back-to-home-btn").addEventListener("click", showDvdList); // Add event for back button
     document.getElementById("save-dvd-btn").addEventListener("click", createDvd);
     document.getElementById("cancel-dvd-btn").addEventListener("click", showDvdList);
 });
@@ -44,15 +45,21 @@ function displayDvds(dvds) {
 }
 
 function showCreateDvdForm() {
+    // Reset form fields
     document.getElementById("new-dvd-title").value = "";
     document.getElementById("new-release-year").value = "";
     document.getElementById("new-director").value = "";
     document.getElementById("new-rating").value = "G"; // Reset to default
     document.getElementById("new-notes").value = "";
 
+    // Clear and hide any existing error messages
+    createErrorMessageDiv.innerHTML = ""; // Clear existing messages
+    createErrorMessageDiv.classList.add("hidden"); // Hide error div
+
+    // Show the Create DVD form and hide the DVD list
     document.getElementById("dvd-table").classList.add("hidden");
     document.getElementById("create-dvd-form").classList.remove("hidden");
-    document.getElementById("error-message").classList.add("hidden");
+
 }
 
 function viewDvd(dvdId) {
@@ -65,6 +72,7 @@ function viewDvd(dvdId) {
         })
         .then(dvd => {
             displayDvdDetails(dvd);
+            document.getElementById("create-dvd-btn").classList.add("hidden"); // Hide Create DVD button
         })
         .catch(error => console.error('Error fetching DVD details:', error));
 }
@@ -84,20 +92,40 @@ function displayDvdDetails(dvd) {
 function showDvdList() {
     document.getElementById("dvd-details").classList.add("hidden");
     document.getElementById("create-dvd-form").classList.add("hidden");
-    document.getElementById("edit-dvd-form").classList.add("hidden"); // Hide edit form
+    document.getElementById("edit-dvd-form").classList.add("hidden");
     document.getElementById("dvd-table").classList.remove("hidden");
-    document.getElementById("error-message").classList.add("hidden"); // Hide any remaining error messages
+    document.getElementById("error-message").classList.add("hidden");
+    document.getElementById("back-to-home-btn").classList.add("hidden"); // Hide back button
+    document.getElementById("create-dvd-btn").classList.remove("hidden"); // Show Create DVD button
+
+
     loadDvds(); // Refresh the list
 }
+
+// Add these at the beginning of your script if not already present
+const searchErrorMessageDiv = document.getElementById("search-error-message"); // Ensure this div is present in your HTML
 
 function searchDvds() {
     const category = document.getElementById("search-category").value;
     const term = document.getElementById("search-term").value.trim();
 
-    if (!category || !term) {
-        showError("Both Search Category and Search Term are required.");
+    const errors = [];
+    if (!category && !term) {
+        errors.push("Both Search Category and Search Term are required.");
+    }
+    if (!category && term) {
+        errors.push("Search Category is required.");
+    }
+    if (category && !term) {
+        errors.push("Search Term is required.");
+    }
+
+    if (errors.length > 0) {
+        displayErrorMessages(searchErrorMessageDiv, errors);
         return;
     }
+
+    searchErrorMessageDiv.classList.add("hidden");
 
     let searchUrl = `${dvdUrl}/${category}/${term}`;
 
@@ -110,18 +138,19 @@ function searchDvds() {
         })
         .then(data => {
             if (data.length === 0) {
-                showError("No results found.");
+                displayErrorMessages(searchErrorMessageDiv, ["No results found."]);
             } else {
                 displayDvds(data);
-                document.getElementById("error-message").classList.add("hidden");
+                searchErrorMessageDiv.classList.add("hidden");
+                document.getElementById("back-to-home-btn").classList.remove("hidden"); // Show back button
+                document.getElementById("create-dvd-btn").classList.add("hidden"); // Hide Create DVD button
             }
         })
         .catch(error => {
             console.error('Error searching DVDs:', error);
-            showError("Error fetching search results.");
+            displayErrorMessages(searchErrorMessageDiv, ["Error fetching search results."]);
         });
 }
-
 
 function showError(message) {
     const errorDiv = document.getElementById("error-message");
@@ -129,6 +158,17 @@ function showError(message) {
     errorDiv.classList.remove("hidden");
 }
 
+
+const createErrorMessageDiv = document.getElementById("create-dvd-error-message");
+const editErrorMessageDiv = document.getElementById("edit-dvd-error-message");
+
+// Function to show error messages in a div
+function displayErrorMessages(errorDiv, messages) {
+    errorDiv.innerHTML = messages.join("<br>");
+    errorDiv.classList.remove("hidden");
+}
+
+// Modified createDvd function with validation
 function createDvd() {
     const title = document.getElementById("new-dvd-title").value.trim();
     const releaseYear = document.getElementById("new-release-year").value.trim();
@@ -141,9 +181,11 @@ function createDvd() {
     if (!/^\d{4}$/.test(releaseYear)) errors.push("Please enter a 4-digit year.");
 
     if (errors.length > 0) {
-        showError(errors.join(" "));
+        displayErrorMessages(createErrorMessageDiv, errors);
         return;
     }
+
+    createErrorMessageDiv.classList.add("hidden"); // Hide error message on success
 
     const newDvd = {
         dvdTitle: title,
@@ -172,7 +214,7 @@ function createDvd() {
         })
         .catch(error => {
             console.error("Error creating DVD:", error);
-            showError("There was an error creating the DVD.");
+            displayErrorMessages(createErrorMessageDiv, ["There was an error creating the DVD."]);
         });
 }
 
@@ -231,6 +273,7 @@ function showEditDvdForm(dvdId) {
             populateEditDvdForm(dvd);
             document.getElementById("dvd-table").classList.add("hidden");
             document.getElementById("edit-dvd-form").classList.remove("hidden");
+            document.getElementById("create-dvd-btn").classList.add("hidden"); // Hide Create DVD button
         })
         .catch(error => console.error('Error fetching DVD details for edit:', error));
 }
@@ -243,6 +286,7 @@ function populateEditDvdForm(dvd) {
     document.getElementById("edit-notes").value = dvd.note;
 }
 
+// Modified updateDvd function with validation
 function updateDvd() {
     const title = document.getElementById("edit-dvd-title").value.trim();
     const releaseYear = document.getElementById("edit-release-year").value.trim();
@@ -255,9 +299,11 @@ function updateDvd() {
     if (!/^\d{4}$/.test(releaseYear)) errors.push("Please enter a 4-digit year.");
 
     if (errors.length > 0) {
-        showError(errors.join(" "));
+        displayErrorMessages(editErrorMessageDiv, errors);
         return;
     }
+
+    editErrorMessageDiv.classList.add("hidden"); // Hide error message on success
 
     const updatedDvd = {
         dvdTitle: title,
@@ -286,6 +332,6 @@ function updateDvd() {
         })
         .catch(error => {
             console.error("Error updating DVD:", error);
-            showError("There was an error updating the DVD.");
+            displayErrorMessages(editErrorMessageDiv, ["There was an error updating the DVD."]);
         });
 }
