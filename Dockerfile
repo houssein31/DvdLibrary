@@ -11,8 +11,8 @@ COPY src ./src
 # Package the application
 RUN mvn clean package -DskipTests
 
-# Use the OpenJDK image to run the application with Java 17
-FROM openjdk:17-jre-slim
+# Use a different OpenJDK image to run the application with Java 17
+FROM openjdk:17-slim
 
 # Set the working directory
 WORKDIR /app
