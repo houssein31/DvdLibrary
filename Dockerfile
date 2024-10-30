@@ -21,11 +21,15 @@ WORKDIR /app
 COPY --from=build /app/target/DVD-Library-0.0.1-SNAPSHOT.jar app.jar
 
 # Set environment variables for the database connection
+ENV SPRING_APPLICATION_NAME=DVD-Library
 ENV DB_HOST=dpg-csgpnmogph6c73bqlvt0-a.virginia-postgres.render.com
 ENV DB_PORT=5432
 ENV DB_NAME=dvdlibrarydb
 ENV DB_USERNAME=housseindev
 ENV DB_PASSWORD=dgrD8SGxkK9ssYnEv3kJBUBmoFsawsIJ
+ENV SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
+ENV SPRING_JPA_HIBERNATE_DDL-AUTO=update
+ENV SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
 
 # Specify the command to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
