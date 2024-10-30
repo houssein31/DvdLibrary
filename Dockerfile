@@ -20,10 +20,12 @@ WORKDIR /app
 # Copy the jar file from the build stage
 COPY --from=build /app/target/DVD-Library-0.0.1-SNAPSHOT.jar app.jar
 
+# Set environment variables for the database connection
+ENV DB_HOST=dpg-csgpnmogph6c73bqlvt0-a.virginia-postgres.render.com
+ENV DB_PORT=5432
+ENV DB_NAME=dvdlibrarydb
+ENV DB_USERNAME=housseindev
+ENV DB_PASSWORD=dgrD8SGxkK9ssYnEv3kJBUBmoFsawsIJ
+
 # Specify the command to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
-# Optional: Uncomment the following lines if you want to pass environment variables for credentials
-# ENV SPRING_DATASOURCE_URL=jdbc:postgresql://dpg-csgpnmogph6c73bqlvt0-a.virginia-postgres.render.com:5432/dvdlibrarydb
-# ENV SPRING_DATASOURCE_USERNAME=housseindev
-# ENV SPRING_DATASOURCE_PASSWORD=dgrD8SGxkK9ssYnEv3kJBUBmoFsawsIJ
