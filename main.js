@@ -1,5 +1,5 @@
-const apiUrl = "http://localhost:8080/api/dvd/all"; // Updated to match backend endpoint
-const dvdUrl = "http://localhost:8080/api/dvd"; // Base URL for DVD operations
+const apiUrl = "https://dvdlibrary-backend.onrender.com/api/dvd/all"; // Updated to production backend URL
+const dvdUrl = "https://dvdlibrary-backend.onrender.com/api/dvd"; // Base URL for DVD operations
 
 document.addEventListener("DOMContentLoaded", () => {
     loadDvds(); // Load DVDs when the document is ready
