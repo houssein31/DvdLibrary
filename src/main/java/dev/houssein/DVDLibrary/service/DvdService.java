@@ -37,7 +37,7 @@ public class DvdService {
 
     @Transactional
     public List<Dvd> getDvdsByTitle(String dvdTitle) {
-        return dvdDao.findByDvdTitleContainingIgnoreCase(dvdTitle);
+        return dvdDao.findByDvdTitleContainingIgnoreCase(dvdTitle);//
     }
 
     @Transactional

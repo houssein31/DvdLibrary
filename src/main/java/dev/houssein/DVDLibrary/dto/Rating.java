@@ -11,7 +11,7 @@ public enum Rating {
     public static Rating fromString(String rating) {
         for (Rating r : Rating.values()) {
             if (r.name().equalsIgnoreCase(rating)) {
-                return r;
+                return r;//
             }
         }
         throw new IllegalArgumentException("No enum constant " + rating);
